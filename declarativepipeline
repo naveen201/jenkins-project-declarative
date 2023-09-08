@@ -6,28 +6,26 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-				//mvn test
-				sh "mvn test"
+		//mvn test
+		sh "mvn test"
             }
         }
         stage('Build ') {
             steps {
-			    //mvn package
+		//mvn package
                 sh "mvn package"
             }
         }        
         stage('Deploy on Test') {
             steps {
-			    //deploy on container plugin
-			    deploy adapters: [tomcat9(credentialsId: 'tomcat1', path: '', url: 'http://ec2-65-0-96-192.ap-south-1.compute.amazonaws.com:8080')], contextPath: '/app', war: '**/*.war'   
-			    sh 'echo "${BUILD_ID}"'   
+		//deploy on container plugin
+		deploy adapters: [tomcat9(credentialsId: 'tomcat1', path: '', url: 'http://ec2-65-0-96-192.ap-south-1.compute.amazonaws.com:8080')], contextPath: '/app', war: '**/*.war'   
             }
         }                      
         stage('deploy on prod') {
             steps {
-			    //deploy on container plugin
+		//deploy on container plugin
                 deploy adapters: [tomcat9(credentialsId: 'tomcat1', path: '', url: 'http://ec2-43-205-103-199.ap-south-1.compute.amazonaws.com:8080')], contextPath: '/app', war: '**/*.war'
-                echo 'deploy on prod'
             }    
         }
     }
